@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ШКОЛТЕХ - Выдачи</title>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .vydachi-content {
+            padding: 30px;
+            min-height: calc(100vh - 60px);
+            display: flex;
+            gap: 40px;
+        }
+        .profile-section {
+            flex: 0 0 33.333%;
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .user-profile-large {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            text-align: center;
+        }
+        .avatar-xlarge {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #081B7D, #3b82f6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: bold;
+            color: white;
+        }
+        .user-fullname-large {
+            font-family: 'UNCAGE', sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+            color: #1e293b;
+        }
+        .user-role-large {
+            font-family: 'UNCAGE', sans-serif;
+            font-size: 16px;
+            color: #64748b;
+            background: #e2e8f0;
+            padding: 6px 15px;
+            border-radius: 20px;
+        }
+        .user-role-large.teacher {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .user-role-large.student {
+            background-color: #2196F3;
+            color: white;
+        }
+        .category-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .category-btn {
+            background: white;
+            border: 2px solid #e2e8f0;
+            padding: 18px 20px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #475569;
+            cursor: pointer;
+            text-align: center;
+        }
+        .category-btn-additional {
+            background: white;
+            border: 2px solid #000000;
+            padding: 18px 20px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #475569;
+            cursor: pointer;
+            text-align: center;
+        }
+        .category-btn.active {
+            background: #081B7D;
+            color: white;
+            border-color: #081B7D;
+        }
+        .orders-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .orders-title {
+            font-family: 'UNCAGE', sans-serif;
+            font-size: 36px;
+            font-weight: bold;
+            color: #1e293b;
+            margin: 0;
+        }
+        .section-content {
+            display: block;
+        }
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .equipment-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        .equipment-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .equipment-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .equipment-name {
+            font-family: 'UNCAGE', sans-serif;
+            font-size: 22px;
+            font-weight: bold;
+            color: #1e293b;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .equipment-description {
+            font-size: 16px;
+            font-family: 'MONTSERRAT', sans-serif;
+            color: #64748b;
+            line-height: 1.4;
+            margin: 0;
+            flex-grow: 1;
+        }
+        .equipment-class {
+            font-size: 14px;
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 0;
+            align-self: flex-start;
+        }
+        .equipment-class.technology {
+            color: #ea580c;
+            background-color: #fff7ed;
+            border: 1px solid #fdba74;
+        }
+        .equipment-class.biology {
+            color: #16a34a;
+            background-color: #f0fdf4;
+            border: 1px solid #86efac;
+        }
+        .equipment-class.informatics {
+            color: #2563eb;
+            background-color: #eff6ff;
+            border: 1px solid #93c5fd;
+        }
+        .equipment-class.chemistry {
+            color: #7c3aed;
+            background-color: #faf5ff;
+            border: 1px solid #c4b5fd;
+        }
+        .equipment-class.physics {
+            color: #db2777;
+            background-color: #fdf2f8;
+            border: 1px solid #f9a8d4;
+        }
+        .equipment-class.other {
+            background: #6b7280;
+            color: white;
+        }
+        .equipment-meta {
+            font-size: 12px;
+            color: #64748b;
+        }
+        .order-button {
+            background-color: #081B7D;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .order-button.disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        .order-button:not(.disabled):hover {
+            background-color: #0a24a0;
+        }
+        .unavailable-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 15px;
+            z-index: 2;
+        }
+        .unavailable-text {
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            padding: 20px;
+            background: rgba(220, 53, 69, 0.9);
+            border-radius: 10px;
+        }
+        .requests-section {
+            margin-top: 20px;
+        }
+        .request-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .request-header {
+            font-family: 'UNCAGE', sans-serif;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .request-status {
+            font-family: 'UNCAGE', sans-serif;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-approved { background: #d4edda; color: #155724; }
+        .status-rejected { background: #f8d7da; color: #721c24; }
+        .status-returned { background: #e2e3e5; color: #383d41; }
+        .teacher-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .action-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .btn-approve { background: #28a745; color: white; }
+        .btn-reject { background: #dc3545; color: white; }
+        .btn-return { background: #6c757d; color: white; }
+        .no-equipment, .no-requests {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+            font-size: 18px;
+        }
+
+        .add-equipment-form {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .add-equipment-content {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .add-equipment-content h2 {
+            margin-bottom: 20px;
+            color: #1e293b;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+            font-family: 'MONTSERRAT', sans-serif;
+        }
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+        .form-row button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .form-row button[type="button"] {
+            background: #6c757d;
+            color: white;
+        }
+        .form-row button[type="submit"] {
+            background: #081B7D;
+            color: white;
+        }
+
+        .loading, .no-requests, .error {
+            text-align: center;
+            padding: 40px;
+            font-size: 18px;
+            color: #666;
+        }
+
+        .error {
+            color: #dc3545;
+            background: #f8d7da;
+            border-radius: 10px;
+            border: 1px solid #f5c6cb;
+        }
+
+        .action-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .action-btn:disabled:hover {
+            background-color: #6c757d;
+        }
+
+        .request-item {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid;
+        }
+
+        .request-item .status-pending { border-left-color: #ffc107; }
+        .request-item .status-approved { border-left-color: #28a745; }
+        .request-item .status-rejected { border-left-color: #dc3545; }
+        .request-item .status-returned { border-left-color: #6c757d; }
+
+        .teacher-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            min-width: 120px;
+        }
+
+        .btn-approve { 
+            background: #28a745; 
+            color: white; 
+        }
+        .btn-approve:hover { 
+            background: #218838; 
+        }
+
+        .btn-reject { 
+            background: #dc3545; 
+            color: white; 
+        }
+        .btn-reject:hover { 
+            background: #c82333; 
+        }
+
+        .btn-return { 
+            background: #6c757d; 
+            color: white; 
+        }
+        .btn-return:hover { 
+            background: #5a6268; 
+        }
+
+        @media (max-width: 992px) {
+            .vydachi-content { flex-direction: column; }
+            .profile-section { flex: none; }
+            .category-buttons { flex-direction: row; overflow-x: auto; }
+            .category-btn { min-width: 120px; }
+        }
+
+        @media (max-width: 768px) {
+            .vydachi-content { padding: 20px; }
+            .equipment-grid { grid-template-columns: 1fr; }
+            .request-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-section">
+            <a href="{{ url_for('home') }}" class="logo-link">
+                <div class="logo-text">ШКОЛТЕХ</div>
+            </a>
+            <div class="location">МОСКВА</div>
+        </div>
+
+        <div class="user-section">
+            {% if user and user.role == 'teacher' %}
+            <a href="{{ url_for('admin_panel') }}" class="admin-nav-btn" style="margin-right: 15px;">
+                Администрирование
+            </a>
+            {% endif %}
+            
+            <div class="notification-icon" id="notificationIcon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                {% if unread_count and unread_count > 0 %}
+                <div class="notification-badge">{{ unread_count }}</div>
+                {% endif %}
+            </div>
+            
+            <a href="{{ url_for('account') }}" class="user-profile-link">
+                <div class="user-profile">
+                    <div class="avatar">{{ user.avatar }}</div>
+                    <div class="user-info">
+                        <div class="username">{{ user.first_name }} {% if user.middle_name %}{{ user.middle_name }}{% endif %}</div>
+                        <div class="user-role {{ user.role }}">{{ user.role_display }}</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </nav>
+
+    <div id="notificationsPanel" class="notifications-panel">
+        <div class="notifications-header">
+            <h3>УВЕДОМЛЕНИЯ</h3>
+            <button onclick="markAllAsRead()">ПРОЧИТАТЬ ВСЕ</button>
+        </div>
+        <div class="notifications-list">
+            <div class="notification-item">Загрузка...</div>
+        </div>
+    </div>
+
+    <div class="content vydachi-content">
+        <div class="profile-section">
+            <div class="user-profile-large">
+                <div class="avatar-xlarge">{{ user.avatar }}</div>
+                <div class="user-fullname-large">
+                    {{ user.last_name }} {{ user.first_name }} {% if user.middle_name %}{{ user.middle_name }}{% endif %}
+                </div>
+                <div class="user-role-large {{ user.role }}">{{ user.role_display }}</div>
+            </div>
+
+            <div class="category-buttons">
+                <button class="category-btn active" onclick="showSection('equipment', this)">Оборудование</button>
+                {% if user.role == 'student' %}
+                <button class="category-btn" onclick="showSection('my-requests', this)">Мои заказы</button>
+                {% else %}
+                <button class="category-btn" onclick="showSection('requests', this)">Заказы учеников</button>
+                <button class="category-btn-additional" onclick="showAddEquipmentForm()">Управление оборудованием</button>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="orders-section">
+            <h1 class="orders-title">
+                {% if user.role == 'student' %}ДОСТУПНОЕ ОБОРУДОВАНИЕ{% else %}УПРАВЛЕНИЕ ВЫДАЧАМИ{% endif %}
+            </h1>
+
+            <div id="equipment-section" class="section-content">
+                <div class="equipment-grid">
+                    {% if equipment %}
+                        {% for item in equipment %}
+                        <div class="equipment-card">
+                            <img src="{{ url_for('static', filename=item.image_path) }}" 
+                                alt="{{ item.name }}" 
+                                class="equipment-image"
+                                onerror="this.src='{{ url_for('static', filename='images/placeholder.jpg') }}'">
+                            
+                            {% if item.available == 0 %}
+                            <div class="unavailable-overlay">
+                                <div class="unavailable-text">Нет в наличии</div>
+                            </div>
+                            {% endif %}
+                            
+                            <div class="equipment-content">
+                                <h3 class="equipment-name">{{ item.name }}</h3>
+                                <p class="equipment-description">{{ item.description if item.description else 'Описание отсутствует' }}</p>
+                                <span class="equipment-class {{ item.category }}">
+                                    {% if item.category == 'technology' %}ТЕХНОЛОГИИ
+                                    {% elif item.category == 'biology' %}БИОЛОГИЯ
+                                    {% elif item.category == 'informatics' %}ИНФОРМАТИКА
+                                    {% elif item.category == 'chemistry' %}ХИМИЯ
+                                    {% elif item.category == 'physics' %}ФИЗИКА
+                                    {% else %}ДРУГОЕ{% endif %}
+                                </span>
+                                <div class="equipment-meta">
+                                    <small>Доступно: {{ item.available if item.available is not none else 0 }} шт.</small>
+                                    <small>Добавил: {{ item.creator_name if item.creator_name else 'Система' }}</small>
+                                </div>
+                                {% if user.role == 'student' %}
+                                    {% if item.available and item.available > 0 %}
+                                    <button class="order-button" onclick="requestEquipment({{ item.id }})">ПОДАТЬ ЗАЯВКУ</button>
+                                    {% else %}
+                                    <button class="order-button disabled" disabled>НЕТ В НАЛИЧИИ</button>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="no-equipment">
+                            <p>Оборудование не найдено</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            {% if user.role == 'student' %}
+            <div id="my-requests-section" class="section-content" style="display: none;">
+                <div class="requests-section">
+                    {% if student_requests %}
+                        {% for request in student_requests %}
+                        <div class="request-item">
+                            <div class="request-header">
+                                <h3>{{ request.equipment_name if request.equipment_name else 'Неизвестное оборудование' }}</h3>
+                                <span class="request-status status-{{ request.status if request.status else 'pending' }}">
+                                    {% if request.status == 'pending' %}ОЖИДАЕТ РАССМОТРЕНИЯ
+                                    {% elif request.status == 'approved' %}ОДОБРЕНО
+                                    {% elif request.status == 'rejected' %}ОТКЛОНЕНО
+                                    {% elif request.status == 'returned' %}ВОЗВРАЩЕНО
+                                    {% else %}{{ (request.status|upper) if request.status else 'НЕИЗВЕСТНО' }}{% endif %}
+                                </span>
+                            </div>
+                            <p>{{ request.equipment_description if request.equipment_description else 'Описание отсутствует' }}</p>
+                            <small>Заявка на получение подана: {{ request.request_date if request.request_date else 'Дата не указана' }}</small>
+                            {% if request.approve_date %}
+                            <br><small>Рассмотрена: {{ request.approve_date if request.approve_date else 'Дата не указана' }}</small>
+                            {% endif %}
+                            {% if request.due_date %}
+                            <br><small>Необходимо вернуть до: {{ request.due_date if request.due_date else 'Дата не указана' }}</small>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <div class="no-requests">
+                            <p>У вас пока нет заявок</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            {% else %}
+            <div id="requests-section" class="section-content" style="display: none;">
+                <div class="requests-section">
+                    <div id="teacher-requests-list">
+                        <p>Загрузка заявок...</p>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if user.role == 'teacher' %}
+    <div id="addEquipmentModal" class="add-equipment-form">
+        <div class="add-equipment-content">
+            <h2>ДОБАВИТЬ ОБОРУДОВАНИЕ</h2>
+            
+            <form id="addEquipmentForm" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label>Название:</label>
+                    <input type="text" name="name" required maxlength="100">
+                </div>
+                <div class="form-group">
+                    <label>Описание:</label>
+                    <textarea name="description" rows="3" maxlength="500"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Категория:</label>
+                    <select name="category" required>
+                        <option value="technology">ТЕХНОЛОГИИ</option>
+                        <option value="biology">БИОЛОГИЯ</option>
+                        <option value="informatics">ИНФОРМАТИКА</option>
+                        <option value="chemistry">ХИМИЯ</option>
+                        <option value="physics">ФИЗИКА</option>
+                        <option value="other">ДРУГОЕ</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Количество доступных единиц:</label>
+                    <input type="number" name="available" value="1" min="1" max="1000" required>
+                </div>
+                <div class="form-group">
+                    <label>Фотография оборудования:</label>
+                    <input type="file" name="equipment_image" accept="image/*" id="equipmentImageInput">
+                    <small>Можно загрузить PNG, JPG, JPEG, GIF (до 8MB)</small>
+                </div>
+                <div class="form-row">
+                    <button type="button" onclick="hideAddEquipmentForm()">ОТМЕНА</button>
+                    <button type="submit" id="submitEquipmentBtn">ДОБАВИТЬ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% endif %}
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const notificationIcon = document.getElementById('notificationIcon');
+        if (notificationIcon) {
+            notificationIcon.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleNotifications();
+            });
+        }
+        
+        document.addEventListener('click', function(e) {
+            const panel = document.getElementById('notificationsPanel');
+            const icon = document.getElementById('notificationIcon');
+            if (panel && !panel.contains(e.target) && !icon.contains(e.target)) {
+                panel.style.display = 'none';
+            }
+        });
+
+        console.log('Страница выдач загружена');
+    });
+
+    function loadTeacherRequests() {
+        console.log('Загрузка заявок...');
+        const container = document.getElementById('teacher-requests-list');
+        if (!container) {
+            console.error('Контейнер заявок не найден');
+            return;
+        }
+
+        container.innerHTML = '<p>Загрузка...</p>';
+
+        fetch('/teacher_requests')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Ошибка сервера: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Получены данные:', data);
+            
+            if (data.success && data.requests && data.requests.length > 0) {
+                let html = '';
+                data.requests.forEach(request => {
+                    console.log('Обработка заявки:', request.id, request.status);
+                    
+                    let actionsHTML = '';
+                    if (request.status === 'pending') {
+                        actionsHTML = `
+                            <div class="teacher-actions">
+                                <button class="action-btn btn-approve" onclick="approveRequest(${request.id})">ОДОБРИТЬ</button>
+                                <button class="action-btn btn-reject" onclick="rejectRequest(${request.id})">ОТКЛОНИТЬ</button>
+                            </div>
+                        `;
+                    } else if (request.status === 'approved') {
+                        actionsHTML = `
+                            <div class="teacher-actions">
+                                <button class="action-btn btn-return" onclick="returnRequest(${request.id})">ОТМЕТИТЬ ВОЗВРАТ</button>
+                            </div>
+                        `;
+                    }
+                    
+                    html += `
+                        <div class="request-item">
+                            <div class="request-header">
+                                <h3>${request.equipment_name || 'Неизвестное оборудование'}</h3>
+                                <span class="request-status status-${request.status || 'pending'}">
+                                    ${getStatusText(request.status)}
+                                </span>
+                            </div>
+                            <p><strong>Ученик:</strong> ${request.student_name || 'Неизвестный ученик'}</p>
+                            <p><strong>Дата заявки:</strong> ${request.request_date || 'Не указана'}</p>
+                            ${request.due_date ? `<p><strong>Вернуть до:</strong> ${request.due_date}</p>` : ''}
+                            ${actionsHTML}
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+            } else {
+                container.innerHTML = '<p>Нет заявок от учеников</p>';
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка загрузки заявок:', error);
+            container.innerHTML = '<p>Ошибка загрузки заявок</p>';
+        });
+    }
+
+    function getStatusText(status) {
+        const statuses = {
+            'pending': 'ОЖИДАЕТ РАССМОТРЕНИЯ',
+            'approved': 'ОДОБРЕНО', 
+            'rejected': 'ОТКЛОНЕНО',
+            'returned': 'ВОЗВРАЩЕНО'
+        };
+        return statuses[status] || status.toUpperCase();
+    }
+</script>
+</body>
+</html>

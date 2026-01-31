@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ШКОЛТЕХ - Ваша школа</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='images/background.png') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        .school-content {
+            padding: 40px;
+            min-height: calc(100vh - 60px);
+            display: flex;
+            gap: 60px;
+            position: relative;
+        }
+        .school-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: calc(33.333% + 40px);
+            height: 100%;
+            background-color: #edeef2;
+            z-index: 0;
+        }
+        .school-section {
+            flex: 0 0 33.333%;
+            max-width: 33.333%;
+            position: relative;
+            z-index: 1;
+            padding: 30px 0;
+        }
+        .school-image-container {
+            position: relative;
+            width: 100%;
+            height: 380px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+        .school-main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .school-image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: linear-gradient(transparent, rgba(0,0,0,0.5));
+        }
+        .school-name {
+            font-family: 'UNCAGE', sans-serif;
+            position: absolute;
+            bottom: 25px;
+            left: 25px;
+            font-size: 42px;
+            font-weight: bold;
+            color: white;
+        }
+        .school-logo {
+            position: absolute;
+            bottom: 25px;
+            right: 25px;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .school-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .school-info {
+            margin-bottom: 30px;
+        }
+        .section-title {
+            font-family: 'UNCAGE', sans-serif;
+            font-size: 24px;
+            font-weight: bold;
+            color: #1e293b;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #081B7D;
+            padding-bottom: 8px;
+        }
+        .about-text {
+            font-size: 16px;
+            font-family: 'MONTSERRAT', sans-serif;
+            color: #475569;
+            line-height: 1.5;
+            margin-bottom: 25px;
+        }
+        .admin-name {
+            font-size: 18px;
+            font-weight: bold;
+            font-family: 'MONTSERRAT', sans-serif;
+            color: #1e293b;
+            padding: 12px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            border-left: 4px solid #081B7D;
+        }
+        .branches-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #081B7D;
+            width: 100%;
+        }
+        .branches-icon {
+            width: 35px;
+            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .branches-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .branches-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: #081B7D;
+        }
+        .content-right {
+            flex: 1;
+            position: relative;
+            z-index: 1;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .equipment-title {
+            font-family: 'UNCAGE', sans-serif;
+            font-size: 64px;
+            font-weight: bold;
+            color: #1e293b;
+            line-height: 1;
+            margin: 0;
+            text-align: left;
+        }
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 10px;
+        }
+        .equipment-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        .equipment-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .equipment-content {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .equipment-name {
+            font-size: 22px;
+            font-weight: bold;
+            color: #1e293b;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .equipment-description {
+            font-size: 16px;
+            font-family: 'MONTSERRAT', sans-serif;
+            color: #64748b;
+            line-height: 1.4;
+            margin: 0;
+            flex-grow: 1;
+        }
+        .equipment-class {
+            font-size: 14px;
+            font-weight: bold;
+            padding: 6px 12px;
+            border-radius: 8px;
+            display: inline-block;
+            margin: 0;
+            align-self: flex-start;
+        }
+        .equipment-class.technology {
+            color: #ea580c;
+            background-color: #fff7ed;
+            border: 1px solid #fdba74;
+        }
+        .equipment-class.biology {
+            color: #16a34a;
+            background-color: #f0fdf4;
+            border: 1px solid #86efac;
+        }
+        .equipment-class.informatics {
+            color: #2563eb;
+            background-color: #eff6ff;
+            border: 1px solid #93c5fd;
+        }
+        .equipment-class.chemistry {
+            color: #7c3aed;
+            background-color: #faf5ff;
+            border: 1px solid #c4b5fd;
+        }
+        .equipment-class.physics {
+            color: #db2777;
+            background-color: #fdf2f8;
+            border: 1px solid #f9a8d4;
+        }
+        .equipment-class.other {
+            background: #6b7280;
+            color: white;
+        }
+        .equipment-meta {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        @media (max-width: 1200px) {
+            .equipment-title { font-size: 54px; }
+            .equipment-grid { grid-template-columns: 1fr; gap: 25px; }
+        }
+
+        @media (max-width: 992px) {
+            .school-content { flex-direction: column; }
+            .school-content::before { display: none; }
+            .school-section { flex: none; max-width: 100%; }
+            .content-right { background-color: white; border-radius: 20px; padding: 30px; }
+            .equipment-title { font-size: 48px; text-align: center; }
+            .equipment-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .school-content { padding: 20px; gap: 30px; }
+            .content-right { padding: 20px; }
+            .equipment-title { font-size: 36px; }
+            .equipment-grid { grid-template-columns: 1fr; }
+            .school-name { font-size: 32px; }
+        }
+
+        @media (max-width: 480px) {
+            .equipment-title { font-size: 28px; }
+            .school-name { font-size: 24px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-section">
+            <a href="{{ url_for('home') }}" class="logo-link">
+                <div class="logo-text">ШКОЛТЕХ</div>
+            </a>
+            <div class="location">МОСКВА</div>
+        </div>
+
+        <div class="user-section">
+            {% if user and user.role == 'teacher' %}
+            <a href="{{ url_for('admin_panel') }}" class="admin-nav-btn" style="margin-right: 15px;">
+                Администрирование
+            </a>
+            {% endif %}
+            
+            <div class="notification-icon" id="notificationIcon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                {% if unread_count and unread_count > 0 %}
+                <div class="notification-badge">{{ unread_count }}</div>
+                {% endif %}
+            </div>
+            
+            <a href="{{ url_for('account') }}" class="user-profile-link">
+                <div class="user-profile">
+                    <div class="avatar">{{ user.avatar }}</div>
+                    <div class="user-info">
+                        <div class="username">{{ user.first_name }} {% if user.middle_name %}{{ user.middle_name }}{% endif %}</div>
+                        <div class="user-role {{ user.role }}">{{ user.role_display }}</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </nav>
+
+    <div id="notificationsPanel" class="notifications-panel">
+        <div class="notifications-header">
+            <h3>УВЕДОМЛЕНИЯ</h3>
+            <button onclick="markAllAsRead()">ПРОЧИТАТЬ ВСЕ</button>
+        </div>
+        <div class="notifications-list">
+            <div class="notification-item">Загрузка...</div>
+        </div>
+    </div>
+
+    <div class="content school-content">
+        <div class="school-section">
+            <div class="school-image-container">
+                <img src="{{ url_for('static', filename='images/school-building.jpg') }}" alt="Школа" class="school-main-image">
+                <div class="school-image-overlay"></div>
+                <div class="school-name">ШКОЛА №{{ user.school_number if user else '2098' }}</div>
+                <div class="school-logo">
+                    <img src="{{ url_for('static', filename='images/school-logo.png') }}" alt="Логотип школы">
+                </div>
+            </div>
+
+            <div class="school-info">
+                <div class="section-title">О ШКОЛЕ</div>
+                <div class="about-text">
+                    Образовательный комплекс предлагает обучение от 3 до 18 лет, включая дошкольное отделение. Школа работает по различным образовательным программам, включая углублённое изучение языков.
+                </div>
+
+                <div class="section-title">АДМИНИСТРАТОР СЕРВИСА</div>
+                <div class="admin-name">ГОПТАРЬ ЕВГЕНИЙ АНДРЕЕВИЧ</div>
+            </div>
+
+            <div class="branches-section">
+                <div class="branches-icon">
+                    <img src="{{ url_for('static', filename='images/branch-icon.png') }}" alt="Филиалы">
+                </div>
+                <div class="branches-text">6 ФИЛИАЛОВ</div>
+            </div>
+        </div>
+
+        <div class="content-right">
+            <h1 class="equipment-title">ОБОРУДОВАНИЕ ШКОЛЫ</h1>
+            
+            <div class="equipment-grid">
+            {% for item in equipment %}
+            <div class="equipment-card">
+                <img src="{{ url_for('static', filename=item.image_path) }}" alt="{{ item.name }}" class="equipment-image">
+                <div class="equipment-content">
+                    <h3 class="equipment-name">{{ item.name }}</h3>
+                    <p class="equipment-description">{{ item.description }}</p>
+                    <span class="equipment-class {{ item.category }}">
+                        {% if item.category == 'technology' %}ТЕХНОЛОГИИ
+                        {% elif item.category == 'biology' %}БИОЛОГИЯ
+                        {% elif item.category == 'informatics' %}ИНФОРМАТИКА
+                        {% elif item.category == 'chemistry' %}ХИМИЯ
+                        {% elif item.category == 'physics' %}ФИЗИКА
+                        {% else %}{{ item.category|upper }}{% endif %}
+                    </span>
+                    <div class="equipment-meta">
+                        <small>Доступно: {{ item.available }} шт.</small>
+                        {% if item.available == 0 %}
+                        <small style="color: #dc3545; font-weight: bold;">● НЕТ В НАЛИЧИИ</small>
+                        {% endif %}
+                        <small>Добавил: {{ item.creator_name }}</small>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        </div>
+    </div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const notificationIcon = document.getElementById('notificationIcon');
+        if (notificationIcon) {
+            notificationIcon.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleNotifications();
+            });
+        }
+        
+        document.addEventListener('click', function(e) {
+            const panel = document.getElementById('notificationsPanel');
+            const icon = document.getElementById('notificationIcon');
+            if (panel && !panel.contains(e.target) && !icon.contains(e.target)) {
+                panel.style.display = 'none';
+            }
+        });
+    });
+</script>
+</body>
+</html>
