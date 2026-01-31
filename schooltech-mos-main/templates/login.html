@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ШКОЛТЕХ - Вход</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='images/background.png') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        .login-content {
+            padding: 40px;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1400px;
+            gap: 60px;
+        }
+        .login-text {
+            flex: 1;
+            padding-right: 40px;
+        }
+        .login-line {
+            font-family: 'UNCAGE', sans-serif;
+            font-size: 80px;
+            font-weight: bold;
+            color: #1e293b;
+            line-height: 1.1;
+            margin-bottom: 15px;
+        }
+        .school-text {
+            font-family: 'UNCAGE', sans-serif;
+            color: #081B7D;
+        }
+        .login-form-container {
+            flex: 0 0 500px;
+            background: white;
+            padding: 50px 40px;
+            border-radius: 25px;
+            border: 3px solid #081B7D;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+        .form-header {
+            display: flex;
+            align-items: baseline;
+            gap: 5px;
+            margin-bottom: 40px;
+            text-align: center;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 20px;
+            justify-content: center;
+        }
+        .login-title {
+            font-family: 'UNCAGE', sans-serif;
+            font-size: 42px;
+            font-weight: bold;
+            color: #1e293b;
+            display: inline;
+        }
+        .register-link {
+            font-family: 'UNCAGE', sans-serif;
+            font-size: 28px;
+            font-weight: bold;
+            color: #64748b;
+            display: inline;
+            text-decoration: none;
+        }
+        .register-link:hover {
+            color: #081B7D;
+            text-decoration: underline;
+        }
+        .login-form {
+            width: 100%;
+        }
+        .form-group {
+            margin-bottom: 25px;
+            width: 100%;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 18px 22px;
+            border: 2px solid #e2e8f0;
+            border-radius: 15px;
+            font-size: 18px;
+            background-color: #f8fafc;
+            color: #1e293b;
+            height: 60px;
+            font-family: 'MONTSERRAT', sans-serif;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #081B7D;
+            background-color: white;
+        }
+        .form-group input::placeholder {
+            color: #94a3b8;
+            font-size: 16px;
+        }
+        .login-btn {
+            background-color: #081B7D;
+            color: white;
+            border: none;
+            padding: 18px 20px;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            min-width: 150px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            font-family: 'UNCAGE', sans-serif;
+        }
+        .login-btn:hover {
+            background-color: #0a24a0;
+        }
+        .flash-message {
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            font-family: 'MONTSERRAT', sans-serif;
+        }
+        .flash-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .flash-message.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        @media (max-width: 1200px) {
+            .login-line { font-size: 65px; }
+            .login-title { font-size: 36px; }
+            .register-link { font-size: 24px; }
+        }
+
+        @media (max-width: 992px) {
+            .login-section { flex-direction: column; gap: 50px; text-align: center; }
+            .login-text { padding-right: 0; flex: none; }
+            .login-form-container { flex: none; width: 100%; max-width: 500px; }
+            .login-line { font-size: 55px; }
+        }
+
+        @media (max-width: 768px) {
+            .login-content { padding: 30px 20px; height: auto; min-height: 100vh; }
+            .login-line { font-size: 42px; }
+            .login-form-container { padding: 35px 25px; }
+            .form-header { margin-bottom: 30px; }
+            .login-title { font-size: 32px; }
+            .register-link { font-size: 22px; }
+            .form-group input { padding: 16px 20px; font-size: 16px; }
+        }
+
+        @media (max-width: 480px) {
+            .login-line { font-size: 36px; }
+            .login-form-container { padding: 30px 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="content login-content">
+        <div class="login-section">
+            <div class="login-text">
+                <div class="login-line">БЕРИТЕ</div>
+                <div class="login-line">ОБОРУДОВАНИЕ</div>
+                <div class="login-line">В ПРОКАТ В</div>
+                <div class="login-line school-text">ВАШЕЙ ШКОЛЕ</div>
+            </div>
+            
+            <div class="login-form-container">
+                <div class="form-header">
+                    <span class="login-title">ВХОД</span>
+                    <a href="{{ url_for('register') }}" class="register-link">/РЕГИСТРАЦИЯ</a>
+                </div>
+                
+                {% if error %}
+                    <div class="flash-message error">{{ error }}</div>
+                {% endif %}
+                
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="flash-message {{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                
+                <form class="login-form" method="POST" action="{{ url_for('login') }}">
+                    <div class="form-group">
+                        <input type="text" id="username" name="username" placeholder="ИМЯ ПОЛЬЗОВАТЕЛЯ" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <input type="password" id="password" name="password" placeholder="ПАРОЛЬ" required>
+                    </div>
+                    
+                    <button type="submit" class="login-btn">ВОЙТИ</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

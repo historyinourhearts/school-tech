@@ -1,0 +1,323 @@
+@font-face {
+    font-family: 'UNCAGE';
+    src: url('/static/fonts/uncage.ttf') format('truetype');
+    font-display: swap;
+}
+@font-face {
+    font-family: 'MONTSERRAT';
+    src: url('/static/fonts/montserrat.ttf') format('truetype');
+    font-display: swap;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'MONTSERRAT';
+    background-color: #f8fafc;
+}
+
+welcome-text {
+    font-family: 'UNCAGE', sans-serif;
+    background-color: #f8fafc;
+}
+
+/* НАВБАР */
+.navbar {
+    background-color: #081B7D;
+    color: white;
+    padding: 12px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    font-family: 'UNCAGE', sans-serif;
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.location {
+    font-size: 16px;
+    opacity: 0.9;
+}
+
+.user-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.notification-icon {
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    position: relative;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: #dc3545;
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 20px;
+    transition: background-color 0.3s;
+}
+
+.user-profile:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    background: linear-gradient(135deg, #081B7D, #3b82f6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    color: white;
+}
+
+.username {
+    font-size: 14px;
+}
+
+.user-role {
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: bold;
+    margin-top: 4px;
+}
+
+.user-role.teacher {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.user-role.student {
+    background-color: #2196F3;
+    color: white;
+}
+
+.admin-nav-btn {
+    padding: 8px 16px;
+    background: white;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #475569;
+    cursor: pointer;
+    text-align: center;
+    font-family: 'Montserrat;
+}
+
+.admin-nav-btn:hover {
+    background-color: #e2e8f0;
+}
+
+.logo-link {
+    text-decoration: none;
+    color: white !important;
+}
+
+.logo-link:hover {
+    opacity: 0.8;
+}
+
+.user-profile-link {
+    text-decoration: none;
+    color: inherit;
+}
+
+.user-profile-link:hover .user-profile {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    background: linear-gradient(135deg, #081B7D, #3b82f6);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    color: white;
+    flex-shrink: 0;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.username {
+    font-size: 14px;
+    color: white;
+    white-space: nowrap;
+}
+
+.user-role {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: bold;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.user-role.teacher {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.user-role.student {
+    background-color: #2196F3;
+    color: white;
+}
+
+/* УВЕДОМЛЕНИЯ */
+.notifications-panel {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    width: 400px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    z-index: 1000;
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.notifications-header {
+    padding: 15px;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.notifications-header h3 {
+    margin: 0;
+    color: #1e293b;
+}
+
+.notifications-header button {
+    background: #081B7D;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.notification-item {
+    padding: 15px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+}
+
+.notification-item.unread {
+    background: #f0f9ff;
+    border-left: 3px solid #081B7D;
+}
+
+.notification-item:hover {
+    background: #f8fafc;
+}
+
+.notification-message {
+    font-size: 14px;
+    color: #1e293b;
+    margin-bottom: 5px;
+}
+
+.notification-date {
+    font-size: 12px;
+    color: #64748b;
+}
+
+/* ОСНОВНОЙ КОНТЕНТ */
+.content {
+    padding: 40px;
+}
+
+/* АДАПТИВНОСТЬ */
+@media (max-width: 768px) {
+    .navbar {
+        flex-wrap: wrap;
+        gap: 15px;
+        padding: 12px 20px;
+    }
+    
+    .logo-section {
+        flex-wrap: wrap;
+    }
+    
+    .user-section {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+    
+    .content {
+        padding: 20px;
+    }
+    
+    .notifications-panel {
+        width: 300px;
+        right: 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .notifications-panel {
+        width: 280px;
+    }
+}

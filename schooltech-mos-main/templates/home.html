@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ШКОЛТЕХ - Главная</title>
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+
+        body {
+            background-image: url("{{ url_for('static', filename='images/background.png') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        .welcome-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+        }
+        .welcome-text {
+            flex: 0 0 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .name-line {
+            font-size: 90px;
+            font-weight: bold;
+            color: #1e293b;
+            line-height: 1;
+            margin-bottom: 5px;
+            font-family: 'UNCAGE', sans-serif;
+        }
+        .welcome-message {
+            font-family: 'MONTSERRAT', sans-serif;
+            font-size: 70px;
+            font-weight: bold;
+            color: #081B7D;
+            line-height: 1;
+            margin-top: 180px;
+        }
+        .image-section {
+            flex: 0 0 45%;
+            display: flex;
+            justify-content: flex-end;
+            align-items: flex-start;
+        }
+        .welcome-image {
+            max-width: 650px;
+            width: 100%;
+            height: auto;
+        }
+        .buttons-section {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        }
+        .image-button {
+            position: relative;
+            width: 585px;
+            height: 330px;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .image-button:hover {
+            transform: translateY(-3px);
+            transition: all 0.1s ease;
+        }
+        .button-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 20px;
+        }
+        .button-text {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            padding: 20px;
+            font-size: 48px;
+            font-weight: bold;
+            text-align: center;
+            border-radius: 0 0 20px 20px;
+        }
+        .flash-message {
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            text-align: center;
+            font-family: 'MONTSERRAT', sans-serif;
+        }
+        .flash-message.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @media (max-width: 1200px) {
+            .name-line { font-size: 70px; }
+            .welcome-message { font-size: 55px; }
+            .image-button { width: 450px; height: 250px; }
+            .button-text { font-size: 36px; }
+        }
+
+        @media (max-width: 992px) {
+            .welcome-section { flex-direction: column; gap: 50px; text-align: center; }
+            .welcome-text { flex: none; padding-right: 0; }
+            .name-line { font-size: 60px; }
+            .welcome-message { font-size: 45px; margin-top: 40px; }
+            .buttons-section { flex-direction: column; align-items: center; }
+            .image-button { width: 400px; height: 220px; }
+        }
+
+        @media (max-width: 768px) {
+            .name-line { font-size: 48px; }
+            .welcome-message { font-size: 36px; }
+            .image-button { width: 350px; height: 200px; }
+            .button-text { font-size: 28px; padding: 15px; }
+        }
+
+        @media (max-width: 480px) {
+            .name-line { font-size: 36px; }
+            .welcome-message { font-size: 28px; }
+            .image-button { width: 300px; height: 170px; }
+            .button-text { font-size: 24px; padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo-section">
+            <a href="{{ url_for('home') }}" class="logo-link">
+                <div class="logo-text">ШКОЛТЕХ</div>
+            </a>
+            <div class="location">МОСКВА</div>
+        </div>
+        
+        <div class="user-section">
+            {% if user and user.role == 'teacher' %}
+            <a href="{{ url_for('admin_panel') }}" class="admin-nav-btn" style="margin-right: 15px;">
+                Администрирование
+            </a>
+            {% endif %}
+            
+            <div class="notification-icon" id="notificationIcon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+                {% if unread_count and unread_count > 0 %}
+                <div class="notification-badge">{{ unread_count }}</div>
+                {% endif %}
+            </div>
+            
+            <a href="{{ url_for('account') }}" class="user-profile-link">
+                <div class="user-profile">
+                    <div class="avatar">{{ user.avatar }}</div>
+                    <div class="user-info">
+                        <div class="username">{{ user.first_name }} {% if user.middle_name %}{{ user.middle_name }}{% endif %}</div>
+                        <div class="user-role {{ user.role }}">{{ user.role_display }}</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </nav>
+
+    <div id="notificationsPanel" class="notifications-panel">
+        <div class="notifications-header">
+            <h3>УВЕДОМЛЕНИЯ</h3>
+            <button onclick="markAllAsRead()">ПРОЧИТАТЬ ВСЕ</button>
+        </div>
+        <div class="notifications-list">
+            <div class="notification-item">Загрузка...</div>
+        </div>
+    </div>
+
+    <div class="content">
+        {% if error %}
+            <div class="flash-message error">{{ error }}</div>
+        {% endif %}
+
+        {% if user %}
+        <div class="welcome-section">
+            <div class="welcome-text">
+                <div class="name-line">{{ user.first_name }}</div>
+                <div class="name-line">{{ user.middle_name }},</div>
+                <div class="welcome-message">ДОБРО ПОЖАЛОВАТЬ!</div>
+            </div>
+            
+            <div class="image-section">
+                <img src="{{ url_for('static', filename='images/school.png') }}" class="welcome-image" alt="Школа">
+            </div>
+        </div>
+
+        <div class="buttons-section">
+            <a href="{{ url_for('rentals') }}" class="image-button">
+                <img src="{{ url_for('static', filename='images/rentals.jpg') }}" class="button-image" alt="Выдачи">
+                <div class="button-text">ВЫДАЧИ</div>
+            </a>
+            <a href="{{ url_for('school_page') }}" class="image-button">
+                <img src="{{ url_for('static', filename='images/school2.jpg') }}" class="button-image" alt="Школа">
+                <div class="button-text">ШКОЛА</div>
+            </a>
+            <a href="{{ url_for('account') }}" class="image-button">
+                <img src="{{ url_for('static', filename='images/account.jpg') }}" class="button-image" alt="Аккаунт">
+                <div class="button-text">АККАУНТ</div>
+            </a>
+            <!-- В разделе buttons-section добавьте после существующих кнопок: -->
+            <a href="{{ url_for('chat_page') }}" class="image-button">
+                <img src="{{ url_for('static', filename='images/chat.jpg') }}" class="button-image" alt="Чат">
+                <div class="button-text">ЧАТ</div>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const notificationIcon = document.getElementById('notificationIcon');
+        if (notificationIcon) {
+            notificationIcon.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleNotifications();
+            });
+        }
+        
+        document.addEventListener('click', function(e) {
+            const panel = document.getElementById('notificationsPanel');
+            const icon = document.getElementById('notificationIcon');
+            if (panel && !panel.contains(e.target) && !icon.contains(e.target)) {
+                panel.style.display = 'none';
+            }
+        });
+    });
+</script>
+</body>
+</html>
